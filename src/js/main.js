@@ -1,58 +1,57 @@
 "use strict";
 
 // Gesamtbilanz anlegen
-let einnahmen = 0;
-let ausgaben = 0;
-let bilanz = 0;
+let einnahmen = 0,
+    ausgaben = 0,
+    bilanz = 0;
 
-// Eingabedaten holen vom Nutzer
-let titel_1 = prompt('Titel:');
-let typ_1 = prompt('Typ (Einnahme oder Ausgabe):');
-let betrag_1 = parseInt(prompt('Betrag (in Cent):'));
-let datum_1 = prompt('Datum (jjjj-mm-tt):');
+// declarieren der Eingabedaten
+let titel, typ, betrag, datum;
 
-console.log(`Titel: ${titel_1}
-Typ: ${typ_1}
-Betrag: ${betrag_1} Cent
-Datum: ${datum_1}`
-);
+// Eingabedaten holen vom Nutzer als Funktion
+const eintrag_erfassen = function() {
+    titel = prompt('Titel:');
+    typ = prompt('Typ (Einnahme oder Ausgabe):');
+    betrag = parseInt(prompt('Betrag (in Cent):'));
+    datum = prompt('Datum (jjjj-mm-tt):');
+};
 
-if (typ_1 === "Einnahme" || typ_1 === "einnahme") {
-    einnahmen += betrag_1;
-    bilanz += betrag_1;
-} else if (typ_1 === "Ausgabe" || typ_1 === "ausgabe") {
-    ausgaben += betrag_1;
-    bilanz -= betrag_1;
-} else {
-    console.log(`Der Typ "${typ_1}" ist nicht bekannt.`);
-}
+// eingegebene Daten in der Console ausgeben
+const eintrag_ausgeben = function(titel, typ, betrag, datum) {
+    console.log(`Titel: ${titel}
+Typ: ${typ}
+Betrag: ${betrag} Cent
+Datum: ${datum}`
+    );
+};
 
-let titel_2 = prompt('Titel:');
-let typ_2 = prompt('Typ (Einnahme oder Ausgabe):');
-let betrag_2 = parseInt(prompt('Betrag (in Cent):'));
-let datum_2 = prompt('Datum (jjjj-mm-tt):');
+const eintrag_mit_gesamtbilanz_verrechnen = function(typ, betrag) {
+    if (typ === "Einnahme" || typ === "einnahme") {
+        einnahmen += betrag;
+        bilanz += betrag;
+    } else if (typ === "Ausgabe" || typ === "ausgabe") {
+        ausgaben += betrag;
+        bilanz -= betrag;
+    } else {
+        console.log(`Der Typ "${typ}" ist nicht bekannt.`);
+    }
+};
 
-console.log(`Titel: ${titel_2}
-Typ: ${typ_2}
-Betrag: ${betrag_2} ct
-Datum: ${datum_2}`
-);
-
-if (typ_2 === "Einnahme" || typ_2 === "einnahme") {
-    einnahmen += betrag_2;
-    bilanz += betrag_2;
-} else if (typ_2 === "Ausgabe" || typ_2 === "ausgabe") {
-    ausgaben += betrag_2;
-    bilanz -= betrag_2;
-} else {
-    console.log(`Der Typ "${typ_2}" ist nicht bekannt.`);
-}
-
-// Gesamtbilanz ausgeben
-let positiv = bilanz >= 0;
-
-console.log(`Einnahmen: ${einnahmen} ct
+const gesamtbilanz_ausgeben = function(einnahmen, ausgaben, bilanz) {
+    console.log(`Einnahmen: ${einnahmen} ct
 Ausgaben: ${ausgaben} ct
 Bilanz: ${bilanz} ct
-Bilanz ist positiv: ${positiv}`
-);
+Bilanz ist positiv: ${bilanz >= 0}`
+    );
+};
+
+const eintrag_hinzufuegen = function () {
+    eintrag_erfassen();
+    eintrag_ausgeben(titel, typ, betrag, datum);
+    eintrag_mit_gesamtbilanz_verrechnen(typ, betrag);
+    gesamtbilanz_ausgeben(einnahmen, ausgaben, bilanz);
+};
+
+eintrag_hinzufuegen();
+eintrag_hinzufuegen();
+eintrag_hinzufuegen();
