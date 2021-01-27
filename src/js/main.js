@@ -21,12 +21,15 @@ const haushaltsbuch = {
         );
     },
 
-    eintrag_ausgeben() {
-        console.log(`Titel: ${this.neuer_eintrag.titel}
-Typ: ${this.neuer_eintrag.typ}
-Betrag: ${this.neuer_eintrag.betrag} Cent
-Datum: ${this.neuer_eintrag.datum}`
-        );
+    eintraege_ausgeben() {
+        console.clear(); // löscht die Einträge in der Konsole bevor neues ausgegeben wird
+        this.eintraege.forEach(function(eintrag){
+            console.log(`Titel: ${eintrag.titel}\n`
+                + `Typ: ${eintrag.typ}\n`
+                + `Betrag: ${eintrag.betrag} ct\n`
+                + `Datum: ${eintrag.datum}`
+            );
+        });
     },
 
     eintrag_mit_gesamtbilanz_verrechnen() {
@@ -57,7 +60,7 @@ Bilanz ist positiv: ${this.gesamtbilanz.bilanz >= 0}`
 
     eintrag_hinzufuegen() {
         this.eintrag_erfassen();
-        this.eintrag_ausgeben();
+        this.eintraege_ausgeben();
         this.eintrag_mit_gesamtbilanz_verrechnen();
         this.gesamtbilanz_ausgeben();
     }
@@ -66,3 +69,4 @@ Bilanz ist positiv: ${this.gesamtbilanz.bilanz >= 0}`
 haushaltsbuch.eintrag_hinzufuegen();
 haushaltsbuch.eintrag_hinzufuegen();
 haushaltsbuch.eintrag_hinzufuegen();
+console.log(haushaltsbuch);
