@@ -2,24 +2,23 @@
 
 const haushaltsbuch = {
 
-    neuer_eintrag: {
-        titel: null, 
-        typ: null, 
-        betrag: null, 
-        datum: null
-    },
-
     gesamtbilanz: {
         einnahmen: 0,
         ausgaben: 0,
         bilanz:0
     },
 
+    eintraege: [],
+
     eintrag_erfassen() {
-        this.neuer_eintrag.titel = prompt('Titel:');
-        this.neuer_eintrag.typ = prompt('Typ (Einnahme oder Ausgabe):');
-        this.neuer_eintrag.betrag = parseInt(prompt('Betrag (in Cent):'));
-        this.neuer_eintrag.datum = prompt('Datum (jjjj-mm-tt):');
+        this.eintraege.push(
+            {
+                titel: prompt('Titel:'), 
+                typ: prompt('Typ (Einnahme oder Ausgabe):'), 
+                betrag: parseInt(prompt('Betrag (in Cent):')), 
+                datum: prompt('Datum (jjjj-mm-tt):')
+            }
+        );
     },
 
     eintrag_ausgeben() {
