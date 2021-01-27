@@ -32,22 +32,30 @@ const haushaltsbuch = {
         });
     },
 
-    eintrag_mit_gesamtbilanz_verrechnen() {
-        switch (this.neuer_eintrag.typ) {
-            case "Einnahme":
-            case "einnahme":
-                this.gesamtbilanz.einnahmen += this.neuer_eintrag.betrag;
-                this.gesamtbilanz.bilanz += this.neuer_eintrag.betrag;
-                break;
-            case "Ausgabe":
-            case "ausgabe":
-                this.gesamtbilanz.ausgaben += this.neuer_eintrag.betrag;
-                this.gesamtbilanz.bilanz -= this.neuer_eintrag.betrag;
-                break;
-            default:
-                console.log(`Der Typ "${this.neuer_eintrag.typ}" ist nicht bekannt.`);
-                break;
-        }
+    gesamtbilanz_erstellen() {
+        let neue_gesamtbilanz = {
+            einnahmen: 0,
+            ausgaben: 0,
+            bilanz:0
+        };
+        this.eintraege.forEach(function(eintrag){
+            switch (eintrag.typ) {
+                case "Einnahme":
+                case "einnahme":
+                    neue_gesamtbilanz.einnahmen += eintrag.betrag;
+                    neue_gesamtbilanz.bilanz += eintrag.betrag;
+                    break;
+                case "Ausgabe":
+                case "ausgabe":
+                    neue_gesamtbilanz.ausgaben += eintrag.betrag;
+                    neue_gesamtbilanz.bilanz -= eintrag.betrag;
+                    break;
+                default:
+                    console.log(`Der Typ "${eintrag.typ}" ist nicht bekannt.`);
+                    break;
+            }
+        });
+        this.gesamtbilanz = neue_gesamtbilanz;
     },
 
     gesamtbilanz_ausgeben() {
@@ -61,7 +69,7 @@ Bilanz ist positiv: ${this.gesamtbilanz.bilanz >= 0}`
     eintrag_hinzufuegen() {
         this.eintrag_erfassen();
         this.eintraege_ausgeben();
-        this.eintrag_mit_gesamtbilanz_verrechnen();
+        this.gesamtbilanz_erstellen();
         this.gesamtbilanz_ausgeben();
     }
 };
