@@ -30,10 +30,10 @@ const haushaltsbuch = {
     eintraege_ausgeben() {
         console.clear();
         this.eintraege.forEach(function(eintrag){
-            console.log(`Titel: ${eintrag.titel}\n`
-                + `Typ: ${eintrag.typ}\n`
-                + `Betrag: ${eintrag.betrag} ct\n`
-                + `Datum: ${eintrag.datum}`
+            console.log(`Titel: ${eintrag.get("titel")}\n`
+                + `Typ: ${eintrag.get("typ")}\n`
+                + `Betrag: ${eintrag.get("betrag")} ct\n`
+                + `Datum: ${eintrag.get("datum")}`
             );
         });
     },
