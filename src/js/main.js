@@ -39,25 +39,25 @@ const haushaltsbuch = {
     },
 
     gesamtbilanz_erstellen() {
-        let neue_gesamtbilanz = {
-            einnahmen: 0,
-            ausgaben: 0,
-            bilanz:0
-        };
+        let neue_gesamtbilanz = new Map();
+        neue_gesamtbilanz.set("einnahmen", 0);
+        neue_gesamtbilanz.set("ausgaben", 0);
+        neue_gesamtbilanz.set("bilanz", 0);
+
         this.eintraege.forEach(function(eintrag){
-            switch (eintrag.typ) {
+            switch (eintrag.get("typ")) {
                 case "Einnahme":
                 case "einnahme":
-                    neue_gesamtbilanz.einnahmen += eintrag.betrag;
-                    neue_gesamtbilanz.bilanz += eintrag.betrag;
+                    neue_gesamtbilanz.set("einnahmen", neue_gesamtbilanz.get("einnahmen") + eintrag.get("betrag"));
+                    neue_gesamtbilanz.set("bilanz", neue_gesamtbilanz.get("bilanz") + eintrag.get("betrag"));
                     break;
                 case "Ausgabe":
                 case "ausgabe":
-                    neue_gesamtbilanz.ausgaben += eintrag.betrag;
-                    neue_gesamtbilanz.bilanz -= eintrag.betrag;
+                    neue_gesamtbilanz.set("ausgaben", neue_gesamtbilanz.get("ausgaben") + eintrag.get("betrag"));
+                    neue_gesamtbilanz.set("bilanz", neue_gesamtbilanz.get("bilanz") - eintrag.get("betrag"));
                     break;
                 default:
-                    console.log(`Der Typ "${eintrag.typ}" ist nicht bekannt.`);
+                    console.log(`Der Typ "${eintrag.get("typ")}" ist nicht bekannt.`);
                     break;
             }
         });
@@ -65,10 +65,10 @@ const haushaltsbuch = {
     },
 
     gesamtbilanz_ausgeben() {
-        console.log(`Einnahmen: ${this.gesamtbilanz.einnahmen} ct\n`
-            + `Ausgaben: ${this.gesamtbilanz.ausgaben} ct\n`
-            + `Bilanz: ${this.gesamtbilanz.bilanz} ct\n`
-            + `Bilanz ist positiv: ${this.gesamtbilanz.bilanz >= 0}`
+        console.log(`Einnahmen: ${this.gesamtbilanz.get("einnahmen")} ct\n`
+            + `Ausgaben: ${this.gesamtbilanz.get("ausgaben")} ct\n`
+            + `Bilanz: ${this.gesamtbilanz.get("bilanz")} ct\n`
+            + `Bilanz ist positiv: ${this.gesamtbilanz.get("bilanz") >= 0}`
         );
     },
 
