@@ -3,8 +3,8 @@
 const haushaltsbuch = {
 
     gesamtbilanz: new Map(),
-    
     eintraege: [],
+    fehler: [],
 
     eintrag_erfassen() {
         let neuer_eintrag = new Map();
@@ -13,7 +13,14 @@ const haushaltsbuch = {
         neuer_eintrag.set("betrag", this.betrag_verarbeiten(prompt('Betrag (in Euro, ohne € - Zeichen):')));
         neuer_eintrag.set("datum", this.datum_verarbeiten(prompt('Datum (jjjj-mm-tt):')));
         neuer_eintrag.set("timestamp", Date.now());
-        this.eintraege.push(neuer_eintrag);
+        if (this.fehler.length === 0) {
+            this.eintraege.push(neuer_eintrag);
+        } else {
+            console.log("Folgende Fehler wurden gefunden:");
+            this.fehler.forEach(function(fehler) {
+                console.log(fehler);
+            });
+        } 
     },
 
     titel_verarbeiten(titel) {
@@ -21,8 +28,7 @@ const haushaltsbuch = {
         if(this.titel_validieren(titel)) {
             return titel;
         } else {
-            console.log("Kein Titel angegeben.");
-            return false;
+            this.fehler.push("Kein Titel angegeben.");
         };
     },
 
@@ -36,11 +42,10 @@ const haushaltsbuch = {
 
     typ_verarbeiten(typ) {
         typ = typ.trim().toLowerCase();
-        if(this.typ_validieren(typ)) {
+        if  (this.typ_validieren(typ)) {
             return typ;
         } else {
-            console.log(`Ungültiger Eintrags-Typ: "${typ}".`);
-            return false;
+            this.fehler.push(`Ungültiger Eintrags-Typ: "${typ}".`);
         };
     },
 
@@ -54,11 +59,10 @@ const haushaltsbuch = {
 
     betrag_verarbeiten(betrag) {
         betrag = betrag.trim();
-        if(this.betrag_validieren(betrag)) {
+        if (this.betrag_validieren(betrag)) {
             return parseFloat(betrag.replace(',', '.')) * 100;
         } else {
-            console.log(`Ungültiger Bertag: "${betrag}" €.`);
-            return false;
+            this.fehler.push(`Ungültiger Bertag: "${betrag}" €.`);
         };
     },
 
@@ -72,15 +76,14 @@ const haushaltsbuch = {
 
     datum_verarbeiten(datum){
         datum = datum.trim();
-        if(this.datum_validieren){
+        if (this.datum_validieren(datum)) {
             return new Date(`${datum} 00:00:00`);
         } else {
-            console.log(`Ungültiges Datumsformat: "${datum}".`);
-            return false;
+            this.fehler.push(`Ungültiges Datumsformat: "${datum}".`);
         };
     },
 
-    datum_validieren(datum){
+    datum_validieren(datum) {
         if (datum.match(/^\d{4}-\d{2}-\d{2}$/) !== null) {
             return true;
         } else {
@@ -151,10 +154,14 @@ const haushaltsbuch = {
         let weiterer_eintrag = true;
         while (weiterer_eintrag) {
             this.eintrag_erfassen();
-            this.eintraege_sortieren();
-            this.eintraege_ausgeben();
-            this.gesamtbilanz_erstellen();
-            this.gesamtbilanz_ausgeben();
+            if (this.fehler.length === 0){
+                this.eintraege_sortieren();
+                this.eintraege_ausgeben();
+                this.gesamtbilanz_erstellen();
+                this.gesamtbilanz_ausgeben();
+            } else {
+                this.fehler = [];
+            }
             weiterer_eintrag = confirm("Weiteren Eintrag hinzufügen?");
         }
     }
