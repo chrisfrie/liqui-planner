@@ -8,12 +8,30 @@ const haushaltsbuch = {
 
     eintrag_erfassen() {
         let neuer_eintrag = new Map();
-        neuer_eintrag.set("titel", prompt('Titel:').trim());
+        neuer_eintrag.set("titel", this.titel_verarbeiten(prompt('Titel:')));
         neuer_eintrag.set("typ", prompt('Typ (Einnahme oder Ausgabe):').trim());
         neuer_eintrag.set("betrag", this.betrag_verarbeiten(prompt('Betrag (in Euro, ohne € - Zeichen):')));
         neuer_eintrag.set("datum", this.datum_verarbeiten(prompt('Datum (jjjj-mm-tt):')));
         neuer_eintrag.set("timestamp", Date.now());
         this.eintraege.push(neuer_eintrag);
+    },
+
+    titel_verarbeiten(titel) {
+        titel = titel.trim();
+        if(this.titel_validieren(titel)) {
+            return titel;
+        } else {
+            console.log("Kein Titel angegeben.");
+            return false;
+        };
+    },
+
+    titel_validieren(titel){
+        if (titel !== "") {
+            return true;
+        } else {
+            return false;
+        }
     },
 
     betrag_verarbeiten(betrag) {
