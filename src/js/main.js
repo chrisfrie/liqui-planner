@@ -9,7 +9,7 @@ const haushaltsbuch = {
     eintrag_erfassen() {
         let neuer_eintrag = new Map();
         neuer_eintrag.set("titel", this.titel_verarbeiten(prompt('Titel:')));
-        neuer_eintrag.set("typ", prompt('Typ (Einnahme oder Ausgabe):').trim());
+        neuer_eintrag.set("typ", this.typ_verarbeiten(prompt('Typ (Einnahme oder Ausgabe):')));
         neuer_eintrag.set("betrag", this.betrag_verarbeiten(prompt('Betrag (in Euro, ohne € - Zeichen):')));
         neuer_eintrag.set("datum", this.datum_verarbeiten(prompt('Datum (jjjj-mm-tt):')));
         neuer_eintrag.set("timestamp", Date.now());
@@ -34,12 +34,30 @@ const haushaltsbuch = {
         }
     },
 
+    typ_verarbeiten(typ) {
+        typ = typ.trim().toLowerCase();
+        if(this.typ_validieren(typ)) {
+            return typ;
+        } else {
+            console.log(`Ungültiger Eintrags-Typ: "${typ}".`);
+            return false;
+        };
+    },
+
+    typ_validieren(typ){
+        if (typ.match(/^(?:einnahme|ausgabe)$/) !== null) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
     betrag_verarbeiten(betrag) {
         betrag = betrag.trim();
         if(this.betrag_validieren(betrag)) {
             return parseFloat(betrag.replace(',', '.')) * 100;
         } else {
-            console.log(`Ungültiger Bertag: ${betrag} €`);
+            console.log(`Ungültiger Bertag: "${betrag}" €.`);
             return false;
         };
     },
@@ -57,7 +75,7 @@ const haushaltsbuch = {
         if(this.datum_validieren){
             return new Date(`${datum} 00:00:00`);
         } else {
-            console.log(`Ungültiges Datumsformat: ${datum}`);
+            console.log(`Ungültiges Datumsformat: "${datum}".`);
             return false;
         };
     },
@@ -105,12 +123,10 @@ const haushaltsbuch = {
 
         this.eintraege.forEach(function(eintrag){
             switch (eintrag.get("typ")) {
-                case "Einnahme":
                 case "einnahme":
                     neue_gesamtbilanz.set("einnahmen", neue_gesamtbilanz.get("einnahmen") + eintrag.get("betrag"));
                     neue_gesamtbilanz.set("bilanz", neue_gesamtbilanz.get("bilanz") + eintrag.get("betrag"));
                     break;
-                case "Ausgabe":
                 case "ausgabe":
                     neue_gesamtbilanz.set("ausgaben", neue_gesamtbilanz.get("ausgaben") + eintrag.get("betrag"));
                     neue_gesamtbilanz.set("bilanz", neue_gesamtbilanz.get("bilanz") - eintrag.get("betrag"));
