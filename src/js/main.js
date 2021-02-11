@@ -10,13 +10,14 @@ const haushaltsbuch = {
         let neuer_eintrag = new Map();
         neuer_eintrag.set("titel", prompt('Titel:').trim());
         neuer_eintrag.set("typ", prompt('Typ (Einnahme oder Ausgabe):').trim());
-        neuer_eintrag.set("betrag", this.betrag_verarbeiten(prompt('Betrag (in Euro, ohne € - Zeichen):').trim()));
-        neuer_eintrag.set("datum", this.datum_verarbeiten(prompt('Datum (jjjj-mm-tt):').trim()));
+        neuer_eintrag.set("betrag", this.betrag_verarbeiten(prompt('Betrag (in Euro, ohne € - Zeichen):')));
+        neuer_eintrag.set("datum", this.datum_verarbeiten(prompt('Datum (jjjj-mm-tt):')));
         neuer_eintrag.set("timestamp", Date.now());
         this.eintraege.push(neuer_eintrag);
     },
 
     betrag_verarbeiten(betrag) {
+        betrag = betrag.trim();
         if(this.betrag_validieren(betrag)) {
             return parseFloat(betrag.replace(',', '.')) * 100;
         } else {
@@ -34,6 +35,7 @@ const haushaltsbuch = {
     },
 
     datum_verarbeiten(datum){
+        datum = datum.trim();
         if(this.datum_validieren){
             return new Date(`${datum} 00:00:00`);
         } else {
