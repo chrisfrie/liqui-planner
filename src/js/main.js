@@ -8,10 +8,10 @@ const haushaltsbuch = {
 
     eintrag_erfassen() {
         let neuer_eintrag = new Map();
-        neuer_eintrag.set("titel", prompt('Titel:'));
-        neuer_eintrag.set("typ", prompt('Typ (Einnahme oder Ausgabe):'));
-        neuer_eintrag.set("betrag", this.betrag_verarbeiten(prompt('Betrag (in Euro, ohne € - Zeichen):')));
-        neuer_eintrag.set("datum", new Date(prompt('Datum (jjjj-mm-tt):')));
+        neuer_eintrag.set("titel", prompt('Titel:').trim());
+        neuer_eintrag.set("typ", prompt('Typ (Einnahme oder Ausgabe):').trim());
+        neuer_eintrag.set("betrag", this.betrag_verarbeiten(prompt('Betrag (in Euro, ohne € - Zeichen):').trim()));
+        neuer_eintrag.set("datum", new Date(prompt('Datum (jjjj-mm-tt):') + " 00:00:00").trim());
         neuer_eintrag.set("timestamp", Date.now());
         this.eintraege.push(neuer_eintrag);
     },
